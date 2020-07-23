@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test;
 
 public class InlinseMockTest {
 	
-	@Test
-	void testInMock() {
-		Map mapMock = mock(Map.class);
-		
-		assertEquals(mapMock.size(), 0);
-	}
+@Test
+void testInMock() {
+	Map mapMock = mock(Map.class);
+	
+	assertEquals(mapMock.size(), 0);
+}
 
 }
