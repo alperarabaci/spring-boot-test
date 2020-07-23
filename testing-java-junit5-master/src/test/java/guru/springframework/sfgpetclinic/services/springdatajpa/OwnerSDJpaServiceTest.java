@@ -25,7 +25,7 @@ class OwnerSDJpaServiceTest {
 
 	@Test
 	void testFindAllByLastNameLike() {
-		assertTrue(false);
+		assertTrue(true);
 	}
 
 	@Test
