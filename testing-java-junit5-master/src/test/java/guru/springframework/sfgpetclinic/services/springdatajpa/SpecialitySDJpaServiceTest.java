@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.BDDMockito.given;
 
 import guru.springframework.sfgpetclinic.model.Speciality;
 import guru.springframework.sfgpetclinic.repositories.SpecialtyRepository;
@@ -53,7 +55,21 @@ class SpecialitySDJpaServiceTest {
 		Speciality foundSpeciality = service.findById(ID);
 		
 		assertThat(foundSpeciality).isNotNull();
+		verify(specialtyRepository).findById(anyLong());
 	}
+	
+    @Test
+    void testFindByIdBdd() {
+        Speciality speciality = new Speciality();
+
+        given(specialtyRepository.findById(1L)).willReturn(Optional.of(speciality));
+
+        Speciality foundSpecialty = service.findById(1L);
+
+        assertThat(foundSpecialty).isNotNull();
+
+        verify(specialtyRepository).findById(anyLong());
+    }
 	
 	/**
 	 * Bunu neyi test ediyor acaba?
