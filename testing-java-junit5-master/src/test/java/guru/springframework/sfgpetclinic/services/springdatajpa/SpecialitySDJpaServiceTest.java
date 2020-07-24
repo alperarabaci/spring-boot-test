@@ -20,9 +20,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import guru.springframework.sfgpetclinic.model.Speciality;
 import guru.springframework.sfgpetclinic.repositories.SpecialtyRepository;
+
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SpecialitySDJpaServiceTest {
@@ -60,15 +65,17 @@ class SpecialitySDJpaServiceTest {
 	
     @Test
     void testFindByIdBdd() {
+        //given
         Speciality speciality = new Speciality();
-
         given(specialtyRepository.findById(1L)).willReturn(Optional.of(speciality));
 
+        //when
         Speciality foundSpecialty = service.findById(1L);
 
+        //then
         assertThat(foundSpecialty).isNotNull();
-
-        verify(specialtyRepository).findById(anyLong());
+        then(specialtyRepository).should().findById(anyLong());
+        then(specialtyRepository).shouldHaveNoMoreInteractions();
     }
 	
 	/**
@@ -114,4 +121,32 @@ class SpecialitySDJpaServiceTest {
 		service.delete(new Speciality());
 	}
 
+    @Test
+    void testDoThrow() {
+        doThrow(new RuntimeException("boom")).when(specialtyRepository).delete(any());
+
+        assertThrows(RuntimeException.class, () -> specialtyRepository.delete(new Speciality()));
+
+        verify(specialtyRepository).delete(any());
+    }
+    
+    @Test
+    void testSaveLambda() {
+        //given
+        final String MATCH_ME = "MATCH_ME";
+        Speciality speciality = new Speciality();
+        speciality.setDescription(MATCH_ME);
+
+        Speciality savedSpecialty = new Speciality();
+        savedSpecialty.setId(1L);
+
+        //need mock to only return on match MATCH_ME string
+        when(specialtyRepository.save(argThat(argument -> argument.getDescription().equals(MATCH_ME)))).thenReturn(savedSpecialty);
+
+        //when
+        Speciality returnedSpecialty = service.save(speciality);
+
+        //then
+        assertThat(returnedSpecialty.getId()).isEqualTo(1L);
+    }
 }
