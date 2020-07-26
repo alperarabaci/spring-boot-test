@@ -23,7 +23,9 @@ import guru.springframework.brewery.domain.BeerOrderLine;
 import guru.springframework.brewery.web.model.BeerOrderDto;
 import guru.springframework.brewery.web.model.BeerOrderLineDto;
 import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 
+@Component
 @Mapper(uses = DateMapper.class)
 public interface BeerOrderMapper {
 

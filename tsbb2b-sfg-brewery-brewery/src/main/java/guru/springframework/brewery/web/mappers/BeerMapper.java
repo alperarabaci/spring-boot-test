@@ -20,7 +20,9 @@ package guru.springframework.brewery.web.mappers;
 import guru.springframework.brewery.domain.Beer;
 import guru.springframework.brewery.web.model.BeerDto;
 import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 
+@Component
 @Mapper(uses = DateMapper.class)
 public interface BeerMapper {
 
